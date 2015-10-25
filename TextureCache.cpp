@@ -26,6 +26,6 @@ namespace Adina{
 		}
 
 		return mit->second;// second is the pointer to the texture,
-						   //first it the pointer to the key
+						   // first it the pointer to the key
 	}
 }
