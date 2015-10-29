@@ -48,6 +48,36 @@ namespace Adina{
 		/// return the resul
 		return i_screenCoords;
 	}
+
+	/// simple AABB 
+	bool Camera2D::isBoxInView(const glm::vec2& position, const glm::vec2& dimensions){
+
+		/// for debug purpos
+		/// glm::vec2 scaledScreenDimensions = glm::vec2(m_screenWidth, m_screenHeight) / (m_scaleFactor * 2.0f);
+		glm::vec2 scaledScreenDimensions = glm::vec2(m_screenWidth, m_screenHeight) / m_scaleFactor;
+
+		// The minimum distance before a collision occurs
+		const float MIN_DISTANCE_X = dimensions.x / 2.0f + scaledScreenDimensions.x / 2.0f;
+		const float MIN_DISTANCE_Y = dimensions.y / 2.0f + scaledScreenDimensions.y / 2.0f;
+
+		// Center position of the parameters
+		glm::vec2 centerPos = position + dimensions/2.0f;
+		// Center position of the camera
+		glm::vec2 centerCameraPos = m_position;
+		// Vector from the inut to the camera
+		glm::vec2 distVec = centerPos - centerCameraPos;
+
+		// Get the depth of the collision
+		float xDepth = MIN_DISTANCE_X - abs(distVec.x);
+		float yDepth = MIN_DISTANCE_Y - abs(distVec.y);
+
+		// If either the depths are > 0, then we collided
+		if (xDepth > 0 && yDepth > 0) {
+			/// there was a collision
+			return true;
+		}
+		return false;
+	}
 	void Camera2D::setPosition(const glm::vec2& i_newPosition){
 		m_position = i_newPosition;
 		m_needMatrixUpdate = true;

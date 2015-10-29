@@ -2,18 +2,30 @@
 
 #include <GL\glew.h>
 
+#define defaultColorValue 0
+
 namespace Adina{
 	struct Position
 	{
 		float x;
 		float y;
 	};
-	struct Color
-	{
+
+	struct ColorRGBA8{
 		GLubyte r;
 		GLubyte g;
 		GLubyte b;
 		GLubyte a;
+		ColorRGBA8() : 
+			r(defaultColorValue),
+			g(defaultColorValue),
+			b(defaultColorValue),
+			a(defaultColorValue){
+			/* Empty */ 
+		}
+		ColorRGBA8(GLubyte _r, GLubyte _g, GLubyte _b, GLubyte _a) :
+			r(_r),g(_g),b(_b),a(_a)
+		{ /* Empty */ }
 	};
 	struct UV{
 		float u;
@@ -21,7 +33,7 @@ namespace Adina{
 	};
 	struct Vertex{
 		Position position; ///
-		Color color;       /// 4 bytes for R G B A color
+		ColorRGBA8 color;       /// 4 bytes for R G B A color
 		UV uv;             /// UV texture coordinates
 
 		/// Some Helper Function

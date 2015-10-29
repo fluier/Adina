@@ -19,6 +19,9 @@ namespace Adina{
 		void update();
 
 		glm::vec2 convertScreenToWorld(glm::vec2 i_screenCoords);
+
+		bool isBoxInView(const glm::vec2& position, const glm::vec2& dimensions);
+
 		/// setters
 		void setPosition(const glm::vec2& i_newPosition);
 		void setScaleFactor(const float i_newScaleFactor);

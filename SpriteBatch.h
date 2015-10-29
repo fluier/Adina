@@ -14,13 +14,36 @@ namespace Adina{
 		BACK_TO_FRONT,
 		TEXTURE
 	};
-	struct Glyph{
+	class Glyph{
+	public:
 		GLuint	texture;
 		float depth;
 		Vertex topLeft;
 		Vertex bottomLeft;
 		Vertex topRight;
 		Vertex bottomRight;
+		Glyph(){}
+		Glyph(const glm::vec4& DestRect, const glm::vec4& UVRect, GLuint Texture, float Depth, const ColorRGBA8& Color):
+			texture(Texture),
+			depth(Depth)
+		{
+
+			topLeft.color = Color;
+			topLeft.setPosition(DestRect.x, DestRect.y + DestRect.w);
+			topLeft.setUV(UVRect.x, UVRect.y + UVRect.w);
+
+			bottomLeft.color = Color;
+			bottomLeft.setPosition(DestRect.x, DestRect.y);
+			bottomLeft.setUV(UVRect.x, UVRect.y);
+
+			bottomRight.color = Color;
+			bottomRight.setPosition(DestRect.x + DestRect.z, DestRect.y);
+			bottomRight.setUV(UVRect.x + UVRect.z, UVRect.y);
+
+			topRight.color = Color;
+			topRight.setPosition(DestRect.x + DestRect.z, DestRect.y + DestRect.w);
+			topRight.setUV(UVRect.x + UVRect.z, UVRect.y + UVRect.w);
+		}
 	};
 	class RenderBatch{
 	public:
@@ -40,7 +63,9 @@ namespace Adina{
 		GLuint m_vao;
 		GlyphSortType m_sortType;
 
-		std::vector<Glyph*> m_glyph;
+		std::vector<Glyph> m_glyph;          /// < this are the actual glyphs
+		std::vector<Glyph*> m_glyphPointers; /// < this is for sorting
+
 		std::vector<RenderBatch> m_renderBatches;
 	public:
 		SpriteBatch();
@@ -50,7 +75,7 @@ namespace Adina{
 		void begin(GlyphSortType sortType = GlyphSortType::TEXTURE);
 		void end();
 
-		void draw(const glm::vec4& destRect,const glm::vec4& uvRect,GLuint texture,float depth,const Color& color);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color);
 
 		void renderBatch();
 	private:

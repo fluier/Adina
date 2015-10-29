@@ -20,37 +20,20 @@ namespace Adina{
 		m_sortType = sortType;
 		m_renderBatches.clear();
 		// Have to delete any glyphs that remain so we don't have memory leaks!
-		for (int i = 0; i < m_glyph.size(); i++) {
-			delete m_glyph[i];
-		}
 		m_glyph.clear();
 	}
 	void SpriteBatch::end(){
+		/// set up all pointers for fast sorthing
+		m_glyphPointers.resize(m_glyph.size());
+		for (unsigned i = 0; i < m_glyph.size(); i++){
+			m_glyphPointers[i] = &m_glyph[i];
+		}
 		sortGlyphs();
 		createRenderBatches();
 	}
-	void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const Color& color){
-		Glyph* newGlyph = new Glyph;
-		newGlyph->texture = texture;
-		newGlyph->depth = depth;
-
-		newGlyph->topLeft.color = color;
-		newGlyph->topLeft.setPosition(destRect.x, destRect.y + destRect.w);
-		newGlyph->topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
-
-		newGlyph->bottomLeft.color = color;
-		newGlyph->bottomLeft.setPosition(destRect.x, destRect.y);
-		newGlyph->bottomLeft.setUV(uvRect.x, uvRect.y);
-
-		newGlyph->bottomRight.color = color;
-		newGlyph->bottomRight.setPosition(destRect.x + destRect.z, destRect.y);
-		newGlyph->bottomRight.setUV(uvRect.x +uvRect.z, uvRect.y);
-
-		newGlyph->topRight.color = color;
-		newGlyph->topRight.setPosition(destRect.x + destRect.z, destRect.y + destRect.w);
-		newGlyph->topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
-
-		m_glyph.push_back(newGlyph);
+	void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color)
+	{		
+		m_glyph.emplace_back(destRect, uvRect, texture, depth, color);
 	}
 
 	void SpriteBatch::renderBatch(){
@@ -58,7 +41,7 @@ namespace Adina{
 		// vertex attribute pointers and it binds the VBO
 		glBindVertexArray(m_vao);
 
-		for (int i = 0; i < m_renderBatches.size(); i++){
+		for (unsigned i = 0; i < m_renderBatches.size(); i++){
 			glBindTexture(GL_TEXTURE_2D, m_renderBatches[i].texture);
 
 			glDrawArrays(GL_TRIANGLES, m_renderBatches[i].offset, m_renderBatches[i].numVertices);
@@ -70,9 +53,9 @@ namespace Adina{
 		std::vector<Vertex>vertices;
 		// Resize the buffer to the exact size we need so we can treat
 		// it like an array
-		vertices.resize(m_glyph.size() * 6);
+		vertices.resize(m_glyphPointers.size() * 6);
 
-		if (m_glyph.empty()){
+		if (m_glyphPointers.empty()){
 			return;
 		}
 		int offset = 0;
@@ -80,30 +63,30 @@ namespace Adina{
 		//RenderBatch newBatch(0, 6, m_glyph[0]->texture);
 		//m_renderBatches.emplace_back(newBatch);
 		//Add the first batch
-		m_renderBatches.emplace_back(offset, 6, m_glyph[0]->texture);
-		vertices[cv++] = m_glyph[0]->topLeft;
-		vertices[cv++] = m_glyph[0]->bottomLeft;
-		vertices[cv++] = m_glyph[0]->bottomRight;
-		vertices[cv++] = m_glyph[0]->bottomRight;
-		vertices[cv++] = m_glyph[0]->topRight;
-		vertices[cv++] = m_glyph[0]->topLeft;
+		m_renderBatches.emplace_back(offset, 6, m_glyphPointers[0]->texture);
+		vertices[cv++] = m_glyphPointers[0]->topLeft;
+		vertices[cv++] = m_glyphPointers[0]->bottomLeft;
+		vertices[cv++] = m_glyphPointers[0]->bottomRight;
+		vertices[cv++] = m_glyphPointers[0]->bottomRight;
+		vertices[cv++] = m_glyphPointers[0]->topRight;
+		vertices[cv++] = m_glyphPointers[0]->topLeft;
 		offset += 6;
-		for (int cg = 1; cg < m_glyph.size(); cg++){// current glyph
+		for (unsigned cg = 1; cg < m_glyph.size(); cg++){// current glyph
 			// Check if this glyph can be part of the current batch
-			if (m_glyph[cg]->texture != m_glyph[cg - 1]->texture){
+			if (m_glyphPointers[cg]->texture != m_glyphPointers[cg - 1]->texture){
 				// Make a new batch
-				m_renderBatches.emplace_back(offset, 6, m_glyph[cg]->texture);
+				m_renderBatches.emplace_back(offset, 6, m_glyphPointers[cg]->texture);
 			}
 			else{
 				// If its part of the current batch, just increase numVertices
 				m_renderBatches.back().numVertices += 6;
 			}
-			vertices[cv++] = m_glyph[cg]->topLeft;
-			vertices[cv++] = m_glyph[cg]->bottomLeft;
-			vertices[cv++] = m_glyph[cg]->bottomRight;
-			vertices[cv++] = m_glyph[cg]->bottomRight;
-			vertices[cv++] = m_glyph[cg]->topRight;
-			vertices[cv++] = m_glyph[cg]->topLeft;
+			vertices[cv++] = m_glyphPointers[cg]->topLeft;
+			vertices[cv++] = m_glyphPointers[cg]->bottomLeft;
+			vertices[cv++] = m_glyphPointers[cg]->bottomRight;
+			vertices[cv++] = m_glyphPointers[cg]->bottomRight;
+			vertices[cv++] = m_glyphPointers[cg]->topRight;
+			vertices[cv++] = m_glyphPointers[cg]->topLeft;
 			offset += 6;
 		}
 		// Bind our VBO
@@ -148,14 +131,14 @@ namespace Adina{
 		switch (m_sortType){
 		case GlyphSortType::BACK_TO_FRONT:
 			
-			std::stable_sort(m_glyph.begin(), m_glyph.end(), compareFrontToBack);
+			std::stable_sort(m_glyphPointers.begin(), m_glyphPointers.end(), compareFrontToBack);
 
 			break;
 		case GlyphSortType::FRONT_TO_BACK:
-			std::stable_sort(m_glyph.begin(), m_glyph.end(), compareBackToFront);
+			std::stable_sort(m_glyphPointers.begin(), m_glyphPointers.end(), compareBackToFront);
 			break;
 		case GlyphSortType::TEXTURE:
-			std::stable_sort(m_glyph.begin(), m_glyph.end(), compareTexture);
+			std::stable_sort(m_glyphPointers.begin(), m_glyphPointers.end(), compareTexture);
 			break;
 		default:;
 		}
