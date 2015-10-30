@@ -7,18 +7,18 @@
 #include<cstddef>
 
 namespace Adina{
-
+	//==================================================================================
 	Sprite::Sprite():
 		m_vboID(0){
 	}
-
-
+	//==================================================================================
 	Sprite::~Sprite()
 	{
 		if (m_vboID != 0){
 			glDeleteBuffers(1, &m_vboID);
 		}
 	}
+	//==================================================================================
 	void Sprite::init(float x, float y, float width, float height, std::string texturePath){
 		m_x = x;
 		m_y = y;
@@ -60,7 +60,7 @@ namespace Adina{
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-
+	//==================================================================================
 	void Sprite::draw(){
 		// bind the texture
 		m_texture.bind();
@@ -87,4 +87,5 @@ namespace Adina{
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
-}
+	//==================================================================================
+}/*Adina*/

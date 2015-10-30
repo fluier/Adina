@@ -3,12 +3,13 @@
 #include "ImageLoader.h"
 
 namespace Adina{
+	//==================================================================================
 	TextureCache::TextureCache(){
 	}
-
-
+	//==================================================================================
 	TextureCache::~TextureCache(){
 	}
+	//==================================================================================
 	GLTexture TextureCache::getTexture(std::string texturePath){
 		//std::map<std::string,GLTexture>::iterator mit =  m_textureMap.find(texturePath);
 		auto mit = m_textureMap.find(texturePath);// lookup the texture and see if is in the map
@@ -28,4 +29,5 @@ namespace Adina{
 		return mit->second;// second is the pointer to the texture,
 						   // first it the pointer to the key
 	}
-}
+	//==================================================================================
+}/*Adina*/

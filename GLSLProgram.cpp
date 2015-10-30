@@ -6,7 +6,7 @@
 #include <fstream>
 
 namespace Adina {
-
+	//==================================================================================
     //The : _numAttributes(0) ect. is an initialization list. It is a better way to initialize variables, since it avoids an extra copy. 
     GLSLProgram::GLSLProgram() :
 		m_numAttributes(0),
@@ -16,12 +16,12 @@ namespace Adina {
     {
 		/// Empty
     }
-
+	//==================================================================================
 
     GLSLProgram::~GLSLProgram()
     {
     }
-
+	//==================================================================================
     //Compiles the shaders into a form that your GPU can understand
     void GLSLProgram::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilepath) {
         //Vertex and fragment shaders are successfully compiled.
@@ -45,7 +45,7 @@ namespace Adina {
         compileShader(vertexShaderFilePath, m_vertexShaderID);
         compileShader(fragmentShaderFilepath, m_fragmentShaderID);
     }
-
+	//==================================================================================
     void GLSLProgram::linkShaders() {
 
         //Attach our shaders to our program
@@ -86,20 +86,24 @@ namespace Adina {
         glDeleteShader(m_vertexShaderID);
         glDeleteShader(m_fragmentShaderID);
     }
-
+	//==================================================================================
     //Adds an attribute to our shader. SHould be called between compiling and linking.
     void GLSLProgram::addAttribute(const std::string& attributeName) {
         glBindAttribLocation(m_programID, m_numAttributes++, attributeName.c_str());
     }
+	//==================================================================================
 	void GLSLProgram::setUniform1i(const std::string& uniformName, const int& value){
 		glUniform1i(getUniformLocation(uniformName), value);
 	}
+	//==================================================================================
 	void GLSLProgram::setUniform1f(const std::string& uniformName, const float& value){
 		glUniform1f(getUniformLocation(uniformName), value);
 	}
+	//==================================================================================
 	void GLSLProgram::setUniformMatrix4fv(const std::string& uniformName, const glm::mat4& value){
 		glUniformMatrix4fv(getUniformLocation(uniformName), 1, GL_FALSE, &(value[0][0]));
 	}
+	//==================================================================================
     GLint GLSLProgram::getUniformLocation(const std::string& uniformName) {
         GLint location = glGetUniformLocation(m_programID, uniformName.c_str());
         if (location == GL_INVALID_INDEX) {
@@ -107,7 +111,7 @@ namespace Adina {
         }
         return location;
     }
-
+	//==================================================================================
     //enable the shader, and all its attributes
     void GLSLProgram::use() {
         glUseProgram(m_programID);
@@ -116,7 +120,7 @@ namespace Adina {
             glEnableVertexAttribArray(i);
         }
     }
-
+	//==================================================================================
     //disable the shader
     void GLSLProgram::unuse() {
         glUseProgram(0);
@@ -124,7 +128,7 @@ namespace Adina {
             glDisableVertexAttribArray(i);
         }
     }
-
+	//==================================================================================
     //Compiles a single shader file
     void GLSLProgram::compileShader(const std::string& filePath, GLuint id) {
 
@@ -177,5 +181,5 @@ namespace Adina {
             fatalError("Shader " + filePath + " failed to compile");
         }
     }
-
-}
+	//==================================================================================
+}/*Adina*/

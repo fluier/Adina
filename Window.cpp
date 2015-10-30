@@ -7,17 +7,18 @@
 #define someDefaultValue  500
 
 namespace Adina{
+	//==================================================================================
 	Window::Window():
 		m_screenWidth(someDefaultValue),
 		m_screenHeight(someDefaultValue)
 	{
 
 	}
-
-
+	//==================================================================================
 	Window::~Window()
 	{
 	}
+	//==================================================================================
 	int Window::create(std::string windowName, int screenWidth, int screenHeight, unsigned int currentFlags) {
 
 		Uint32 flags = SDL_WINDOW_OPENGL;
@@ -65,18 +66,19 @@ namespace Adina{
 
 		return 0;
 	}
-
+	//==================================================================================
 	void Window::swapBuffer() {
 		SDL_GL_SwapWindow(m_sdlWindow);
 	}
-
+	//==================================================================================
 	int Window::getScreenWidth() {
 		return m_screenWidth; 
 	}
-
+	//==================================================================================
 	int Window::getScreenHeight() {
 		return m_screenHeight; 
 	}
+	//==================================================================================
 	void Window::enableBlend(){
 		// Enable alpha blend, this will make the black box arownd character to desapear
 		// every PNG have an alpha chanel,
@@ -85,6 +87,7 @@ namespace Adina{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);// the function that will calculate de alpha
 	}
+	//==================================================================================
 	void Window::VSYNC(int value){
 		//Set VSYNC, vertical sincronisation
 		// if the value = 0, no vertical sincronisation is enabled
@@ -94,4 +97,5 @@ namespace Adina{
 		//something for debug purpose
 		//std::cout << "VSYNK: " << swapInterval << std::endl;
 	}
-}
+	//==================================================================================
+}/*Adina*/

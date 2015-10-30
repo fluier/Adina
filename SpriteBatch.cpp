@@ -3,25 +3,26 @@
 #include<algorithm>
 
 namespace Adina{
-
+	//==================================================================================
 	SpriteBatch::SpriteBatch():
 		m_vao(0),
 		m_vbo(0){
 	}
-
-
+	//==================================================================================
 	SpriteBatch::~SpriteBatch(){
 	}
-
+	//==================================================================================
 	void SpriteBatch::init(){
 		createVertexArray();
 	}
+	//==================================================================================
 	void SpriteBatch::begin(GlyphSortType sortType){
 		m_sortType = sortType;
 		m_renderBatches.clear();
 		// Have to delete any glyphs that remain so we don't have memory leaks!
 		m_glyph.clear();
 	}
+	//==================================================================================
 	void SpriteBatch::end(){
 		/// set up all pointers for fast sorthing
 		m_glyphPointers.resize(m_glyph.size());
@@ -31,11 +32,12 @@ namespace Adina{
 		sortGlyphs();
 		createRenderBatches();
 	}
+	//==================================================================================
 	void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color)
 	{		
 		m_glyph.emplace_back(destRect, uvRect, texture, depth, color);
 	}
-
+	//==================================================================================
 	void SpriteBatch::renderBatch(){
 		// Bind our VAO. This sets up the opengl state we need, including the 
 		// vertex attribute pointers and it binds the VBO
@@ -48,6 +50,7 @@ namespace Adina{
 		}
 		glBindVertexArray(0);
 	}
+	//==================================================================================
 	void SpriteBatch::createRenderBatches(){
 		// This will store all the vertices that we need to upload
 		std::vector<Vertex>vertices;
@@ -98,6 +101,7 @@ namespace Adina{
 		// Unbind the VBO
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+	//==================================================================================
 	void SpriteBatch::createVertexArray(){
 		// Generate the VAO if it isn't already generated
 		if (m_vao == 0){
@@ -127,6 +131,7 @@ namespace Adina{
 
 		glBindVertexArray(0);
 	}
+	//==================================================================================
 	void SpriteBatch::sortGlyphs(){
 		switch (m_sortType){
 		case GlyphSortType::BACK_TO_FRONT:
@@ -143,13 +148,17 @@ namespace Adina{
 		default:;
 		}
 	}
+	//==================================================================================
 	bool SpriteBatch::compareFrontToBack(Glyph* a, Glyph* b){
 		return (a->depth < b->depth);
 	}
+	//==================================================================================
 	bool SpriteBatch::compareBackToFront(Glyph* a, Glyph* b){
 		return (a->depth > b->depth);
 	}
+	//==================================================================================
 	bool SpriteBatch::compareTexture(Glyph* a, Glyph* b){
 		return (a->texture < b->texture);
 	}
+	//==================================================================================
 }/*Adina*/

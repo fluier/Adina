@@ -75,6 +75,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Adina.h" />
+    <ClInclude Include="AudioEngine.h" />
     <ClInclude Include="Camera2D.h" />
     <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="GLTexture.h" />
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Adina.cpp" />
+    <ClCompile Include="AudioEngine.cpp" />
     <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="ImageLoader.cpp" />

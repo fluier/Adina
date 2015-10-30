@@ -13,7 +13,7 @@
 //Loading a PNG into a TEXTURE
 */
 namespace Adina{
-
+	//==================================================================================
 	GLTexture ImageLoader::loadPNG(std::string filePath){
 		/// create a texture on the stack, and will return a copy of it at the end
 		GLTexture texture = {}; // initialize all the field of structure with 0
@@ -58,4 +58,5 @@ namespace Adina{
 		//Return a copy of the texture data
 		return texture;
 	}
+	//==================================================================================
 }

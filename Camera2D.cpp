@@ -2,6 +2,7 @@
 #define someDefaultValue  500
 
 namespace Adina{
+	//==================================================================================
 	Camera2D::Camera2D():
 		m_position(0.0f, 0.0f),
 		m_cameraMatrix(1.0f),
@@ -12,18 +13,19 @@ namespace Adina{
 	{
 		/// Empty
 	}
-
-
+	//==================================================================================
 	Camera2D::~Camera2D()
 	{
 		/// Empty
 	}
+	//==================================================================================
 	void Camera2D::init(int i_screenWidth, int i_screenHeight){
 		m_screenWidth = i_screenWidth;
 		m_screenHeight = i_screenHeight;
 		/// the ortoMatrix need to be calculated only once, not taken into calcul the resize windows
 		m_orthoMatrix = glm::ortho(0.0f, (float)m_screenWidth, 0.0f, (float)m_screenHeight);
 	}
+	//==================================================================================
 	void Camera2D::update(){
 		if (m_needMatrixUpdate){
 			//calculate the translation
@@ -36,6 +38,7 @@ namespace Adina{
 			m_needMatrixUpdate = false;
 		}
 	}
+	//==================================================================================
 	glm::vec2 Camera2D::convertScreenToWorld(glm::vec2 i_screenCoords){
 		/// invert the Y coordonates
 		i_screenCoords.y = m_screenHeight - i_screenCoords.y;
@@ -48,7 +51,7 @@ namespace Adina{
 		/// return the resul
 		return i_screenCoords;
 	}
-
+	//==================================================================================
 	/// simple AABB 
 	bool Camera2D::isBoxInView(const glm::vec2& position, const glm::vec2& dimensions){
 
@@ -78,21 +81,27 @@ namespace Adina{
 		}
 		return false;
 	}
+	//==================================================================================
 	void Camera2D::setPosition(const glm::vec2& i_newPosition){
 		m_position = i_newPosition;
 		m_needMatrixUpdate = true;
 	}
+	//==================================================================================
 	void Camera2D::setScaleFactor(const float i_newScaleFactor){
 		m_scaleFactor = i_newScaleFactor;
 		m_needMatrixUpdate = true;
 	}
+	//==================================================================================
 	glm::vec2 Camera2D::getPosition(){
 		return m_position;
 	}
+	//==================================================================================
 	float Camera2D::getScaleFactor(){
 		return m_scaleFactor;
 	}
+	//==================================================================================
 	glm::mat4 Camera2D::getCameraMatrix(){
 		return m_cameraMatrix;
 	}
+	//==================================================================================
 }/*Adina*/

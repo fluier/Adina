@@ -3,20 +3,23 @@
 #include<SDL2\SDL.h>
 
 namespace Adina{
+	//==================================================================================
 	FpsLimiter::FpsLimiter(){
 		/// Empty
 	}
-
+	//==================================================================================
 	void FpsLimiter::init(float maxFPS){
 		setMaxtFPS(maxFPS);
 	}
+	//==================================================================================
 	void FpsLimiter::setMaxtFPS(float maxFPS){
 		m_maxFPS = maxFPS;
 	}
+	//==================================================================================
 	void FpsLimiter::begin(){
 		m_startTicks = SDL_GetTicks();
 	}
-
+	//==================================================================================
 	/// return the current FPS
 	float FpsLimiter::end(){
 		calculateFPS();
@@ -27,6 +30,7 @@ namespace Adina{
 		}
 		return m_fps;
 	}
+	//==================================================================================
 	void FpsLimiter::calculateFPS(){
 		static const int NUM_SAMPLES = 10;
 		static float framesTimes[NUM_SAMPLES];
@@ -60,4 +64,5 @@ namespace Adina{
 			m_fps = 1.1f;
 		}
 	}
+	//==================================================================================
 }/*Adina*/

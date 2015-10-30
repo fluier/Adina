@@ -2,7 +2,7 @@
 
 #include <fstream>
 namespace Adina{
-
+	//==================================================================================
 	bool IOManager::readFileToBuffer(std::string filePath, std::vector<unsigned char>& buffer) {
 		// reading in binary format, takeing the exact content of the file
 		std::ifstream file(filePath, std::ios::binary);
@@ -30,4 +30,5 @@ namespace Adina{
 
 		return true;
 	}
-}
+	//==================================================================================
+}/*Adina*/

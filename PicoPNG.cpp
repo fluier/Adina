@@ -532,4 +532,4 @@ namespace Adina{
 		image_width = decoder.info.width; image_height = decoder.info.height;
 		return decoder.error;
 	}
-}
+}/*Adina*/

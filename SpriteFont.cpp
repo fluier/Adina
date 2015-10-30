@@ -3,7 +3,7 @@
 #include "SpriteBatch.h"
 
 #include <SDL2/SDL.h>
-
+//==================================================================================
 int closestPow2(int i) {
     i--;
     int pi = 1;
@@ -13,11 +13,11 @@ int closestPow2(int i) {
     }
     return pi;
 }
-
+//==================================================================================
 #define MAX_TEXTURE_RES 4096
-
+//==================================================================================
 namespace Adina {
-
+	//==================================================================================
     SpriteFont::SpriteFont(const char* font, int size, char cs, char ce) {
         // Initialize SDL_ttf
         if (!TTF_WasInit()) {

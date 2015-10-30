@@ -6,7 +6,7 @@
 #include <SDL2\SDL.h>
 
 namespace Adina {
-
+	//==================================================================================
     //Prints out an error message and exits the game
     void fatalError(std::string errorString) {
         std::cout << errorString << std::endl;
@@ -16,5 +16,5 @@ namespace Adina {
         SDL_Quit();
         exit(69);
     }
-
-}
+	//==================================================================================
+}/*Adina*/
