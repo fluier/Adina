@@ -3,6 +3,7 @@
 
 
 namespace Adina{
+	//==================================================================================
 	void SoundEffect::play(int loops /* = 0 */){
 		if (Mix_PlayChannel(-1, m_chunk, loops) == -1){
 			if (Mix_PlayChannel(0, m_chunk, loops) == -1){
@@ -10,31 +11,33 @@ namespace Adina{
 			}
 		}
 	}
+	//==================================================================================
 	void Music::play(int loops /* = -1 */){
 		Mix_PlayMusic(m_music, loops);
 	}
-
+	//==================================================================================
 	void Music::pause(){
 		Mix_PauseMusic();
 	}
+	//==================================================================================
 	void Music::stop(){
 		Mix_HaltMusic();
 	}
+	//==================================================================================
 	void Music::resume(){
 		Mix_ResumeMusic();
 	}
-
+	//==================================================================================
 	AudioEngine::AudioEngine()
 	{
 		/// empty
 	}
-
-
+	//==================================================================================
 	AudioEngine::~AudioEngine()
 	{
 		distroy();
 	}
-
+	//==================================================================================
 	void AudioEngine::init(){
 		if (m_isInitialized){
 			fatalError("Tried to initialize AudioEngine twice");
@@ -51,6 +54,7 @@ namespace Adina{
 
 		m_isInitialized = true;
 	}
+	//==================================================================================
 	void AudioEngine::distroy(){
 		if (m_isInitialized){
 			m_isInitialized = false;
@@ -65,11 +69,11 @@ namespace Adina{
 			m_effectMap.clear();
 			m_musicMap.clear();
 
-			Mix_CloseAudio();
-			Mix_Quit();
+			Mix_CloseAudio(); /// Oposide to Mix_OpenAudio
+			Mix_Quit();       /// Oposide to Mix_Init
 		}
 	}
-
+	//==================================================================================
 	SoundEffect AudioEngine::loadSoundEffect(const std::string& filePath){
 		// try to find the audio in cache
 		auto it = m_effectMap.find(filePath);
@@ -92,6 +96,7 @@ namespace Adina{
 
 		return effect;
 	}
+	//==================================================================================
 	Music AudioEngine::loadMusic(const std::string& filePath){
 
 		// try to find the audio in cache
@@ -115,4 +120,5 @@ namespace Adina{
 
 		return music;
 	}
-}
+	//==================================================================================
+}/*Adina*/
