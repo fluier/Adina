@@ -4,6 +4,82 @@
 
 namespace Adina{
 	//==================================================================================
+	Glyph::Glyph()
+	{
+
+	}
+	//==================================================================================
+	Glyph::Glyph(
+		const glm::vec4& DestRect,
+		const glm::vec4& UVRect,
+		GLuint Texture,
+		float Depth,
+		const ColorRGBA8& Color) : texture(Texture),depth(Depth)
+	{
+
+		topLeft.color = Color;
+		topLeft.setPosition(DestRect.x, DestRect.y + DestRect.w);
+		topLeft.setUV(UVRect.x, UVRect.y + UVRect.w);
+
+		bottomLeft.color = Color;
+		bottomLeft.setPosition(DestRect.x, DestRect.y);
+		bottomLeft.setUV(UVRect.x, UVRect.y);
+
+		bottomRight.color = Color;
+		bottomRight.setPosition(DestRect.x + DestRect.z, DestRect.y);
+		bottomRight.setUV(UVRect.x + UVRect.z, UVRect.y);
+
+		topRight.color = Color;
+		topRight.setPosition(DestRect.x + DestRect.z, DestRect.y + DestRect.w);
+		topRight.setUV(UVRect.x + UVRect.z, UVRect.y + UVRect.w);
+	}
+	//==================================================================================
+	Glyph::Glyph(
+		const glm::vec4& DestRect,
+		const glm::vec4& UVRect,
+		GLuint Texture,
+		float Depth,
+		const ColorRGBA8& Color,
+		float angle) : texture(Texture), depth(Depth)
+	{
+		glm::vec2 halfDims(DestRect.z / 2.0f, DestRect.w / 2.0f);
+
+		//get points centered at origin
+		glm::vec2 tl(-halfDims.x, +halfDims.y);
+		glm::vec2 bl(-halfDims.x, -halfDims.y);
+		glm::vec2 br(+halfDims.x, -halfDims.y);
+		glm::vec2 tr(+halfDims.x, +halfDims.y);
+
+		//Rotate the points
+		tl = rotatePoint(tl, angle) + halfDims;
+		bl = rotatePoint(bl, angle) + halfDims;
+		br = rotatePoint(br, angle) + halfDims;
+		tr = rotatePoint(tr, angle) + halfDims;
+
+		topLeft.color = Color;
+		topLeft.setPosition(DestRect.x + tl.x, DestRect.y + tl.y);
+		topLeft.setUV(UVRect.x, UVRect.y + UVRect.w);
+
+		bottomLeft.color = Color;
+		bottomLeft.setPosition(DestRect.x + bl.x, DestRect.y + bl.y);
+		bottomLeft.setUV(UVRect.x, UVRect.y);
+
+		bottomRight.color = Color;
+		bottomRight.setPosition(DestRect.x + br.x, DestRect.y + br.y);
+		bottomRight.setUV(UVRect.x + UVRect.z, UVRect.y);
+
+		topRight.color = Color;
+		topRight.setPosition(DestRect.x + tr.x, DestRect.y + tr.y);
+		topRight.setUV(UVRect.x + UVRect.z, UVRect.y + UVRect.w);
+	}
+	//==================================================================================
+	glm::vec2 Glyph::rotatePoint(glm::vec2 pos, float angle){
+		glm::vec2 newv;
+		newv.x = pos.x * cos(angle) - pos.y * sin(angle);
+		newv.y = pos.x * sin(angle) + pos.y * cos(angle);
+		return newv;
+	}
+	//==================================================================================
 	SpriteBatch::SpriteBatch():
 		m_vao(0),
 		m_vbo(0){
@@ -36,6 +112,33 @@ namespace Adina{
 	void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color)
 	{		
 		m_glyph.emplace_back(destRect, uvRect, texture, depth, color);
+	}
+	//==================================================================================
+	void SpriteBatch::draw(
+		const glm::vec4& destRect,
+		const glm::vec4& uvRect,
+		GLuint texture,
+		float depth,
+		const ColorRGBA8& color,
+		float angle)
+	{
+		m_glyph.emplace_back(destRect, uvRect, texture, depth, color,angle);
+	}
+	//==================================================================================
+	void SpriteBatch::draw(
+		const glm::vec4& destRect,
+		const glm::vec4& uvRect,
+		GLuint texture,
+		float depth,
+		const ColorRGBA8& color,
+		const glm::vec2& dir)
+	{
+		const glm::vec2 right(1.0f, 0.0f);
+		float angle = acos(glm::dot(right, dir));
+		if (dir.y < 0){
+			angle = -angle;
+		}
+		m_glyph.emplace_back(destRect, uvRect, texture, depth, color, angle);
 	}
 	//==================================================================================
 	void SpriteBatch::renderBatch(){

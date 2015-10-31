@@ -22,28 +22,11 @@ namespace Adina{
 		Vertex bottomLeft;
 		Vertex topRight;
 		Vertex bottomRight;
-		Glyph(){}
-		Glyph(const glm::vec4& DestRect, const glm::vec4& UVRect, GLuint Texture, float Depth, const ColorRGBA8& Color):
-			texture(Texture),
-			depth(Depth)
-		{
-
-			topLeft.color = Color;
-			topLeft.setPosition(DestRect.x, DestRect.y + DestRect.w);
-			topLeft.setUV(UVRect.x, UVRect.y + UVRect.w);
-
-			bottomLeft.color = Color;
-			bottomLeft.setPosition(DestRect.x, DestRect.y);
-			bottomLeft.setUV(UVRect.x, UVRect.y);
-
-			bottomRight.color = Color;
-			bottomRight.setPosition(DestRect.x + DestRect.z, DestRect.y);
-			bottomRight.setUV(UVRect.x + UVRect.z, UVRect.y);
-
-			topRight.color = Color;
-			topRight.setPosition(DestRect.x + DestRect.z, DestRect.y + DestRect.w);
-			topRight.setUV(UVRect.x + UVRect.z, UVRect.y + UVRect.w);
-		}
+		Glyph();
+		Glyph(const glm::vec4& DestRect, const glm::vec4& UVRect, GLuint Texture, float Depth, const ColorRGBA8& Color);
+		Glyph(const glm::vec4& DestRect, const glm::vec4& UVRect, GLuint Texture, float Depth, const ColorRGBA8& Color,float angle);
+	private:
+		glm::vec2 rotatePoint(glm::vec2 pos, float angle);
 	};
 	class RenderBatch{
 	public:
@@ -76,6 +59,8 @@ namespace Adina{
 		void end();
 
 		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color,float angle);
+		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, const glm::vec2& dir);
 
 		void renderBatch();
 	private:
