@@ -109,7 +109,12 @@ namespace Adina{
 		createRenderBatches();
 	}
 	//==================================================================================
-	void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color)
+	void SpriteBatch::draw(
+		const glm::vec4& destRect,
+		const glm::vec4& uvRect, 
+		GLuint texture, 
+		float depth, 
+		const ColorRGBA8& color)
 	{		
 		m_glyph.emplace_back(destRect, uvRect, texture, depth, color);
 	}

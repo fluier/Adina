@@ -23,8 +23,19 @@ namespace Adina{
 		Vertex topRight;
 		Vertex bottomRight;
 		Glyph();
-		Glyph(const glm::vec4& DestRect, const glm::vec4& UVRect, GLuint Texture, float Depth, const ColorRGBA8& Color);
-		Glyph(const glm::vec4& DestRect, const glm::vec4& UVRect, GLuint Texture, float Depth, const ColorRGBA8& Color,float angle);
+		Glyph(
+			const glm::vec4& DestRect,
+			const glm::vec4& UVRect,
+			GLuint Texture,
+			float Depth,
+			const ColorRGBA8& Color);
+		Glyph(
+			const glm::vec4& DestRect,
+			const glm::vec4& UVRect,
+			GLuint Texture,
+			float Depth,
+			const ColorRGBA8& Color,
+			float angle);
 	private:
 		glm::vec2 rotatePoint(glm::vec2 pos, float angle);
 	};
@@ -58,9 +69,25 @@ namespace Adina{
 		void begin(GlyphSortType sortType = GlyphSortType::TEXTURE);
 		void end();
 
-		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color);
-		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color,float angle);
-		void draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, const glm::vec2& dir);
+		void draw(
+			const glm::vec4& destRect,
+			const glm::vec4& uvRect,
+			GLuint texture, float depth,
+			const ColorRGBA8& color);
+		void draw(
+			const glm::vec4& destRect,
+			const glm::vec4& uvRect,
+			GLuint texture,
+			float depth,
+			const ColorRGBA8& color,
+			float angle);
+		void draw(
+			const glm::vec4& destRect,
+			const glm::vec4& uvRect,
+			GLuint texture,
+			float depth,
+			const ColorRGBA8& color,
+			const glm::vec2& dir);
 
 		void renderBatch();
 	private:
