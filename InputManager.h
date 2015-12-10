@@ -1,8 +1,9 @@
 #pragma once
 
+#include<glm\glm.hpp>
+
 #include<unordered_map>
 
-#include<glm\glm.hpp>
 
 namespace Adina{
 	class InputManager

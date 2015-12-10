@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#define someDefaultValue  500
+#define someDefaultValue  950
 
 namespace Adina{
 	//==================================================================================

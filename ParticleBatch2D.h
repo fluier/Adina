@@ -1,10 +1,12 @@
 #pragma once
 
-#include<functional>
 #include<glm\glm.hpp>
-#include"Vertex.h"
 #include"GLTexture.h"
+#include<functional>
+#include"Vertex.h"
 #include"SpriteBatch.h"
+
+#include<iostream>
 
 namespace Adina{
 

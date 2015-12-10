@@ -1,11 +1,13 @@
 #pragma once
 
-#include<GL\glew.h>
 #include<glm\glm.hpp>
 
 #include<vector>
 
 #include"Vertex.h"
+
+typedef unsigned int GLuint;
+typedef int GLint;
 
 namespace Adina{
 	enum class GlyphSortType{

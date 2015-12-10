@@ -1,6 +1,7 @@
 #pragma once
+
 #include<glm\glm.hpp>
-#include<glm\gtc\matrix_transform.hpp>
+#include <SDL2/SDL_events.h>
 
 namespace Adina{
 	class Camera2D
@@ -17,6 +18,8 @@ namespace Adina{
 		~Camera2D();
 		void init(int i_screenWidth, int i_screenHeight);
 		void update();
+
+		void onSDLEvent(SDL_Event& evnt);
 
 		glm::vec2 convertScreenToWorld(glm::vec2 i_screenCoords);
 

@@ -1,13 +1,13 @@
-#include<GL/glew.h>
+#include <GL/glew.h>
 #include "ImageLoader.h"
 
-#include"my_Errors.h"
+#include "my_Errors.h"
 
 #include "PicoPNG.h"
 #include "IOManager.h"
 
-#include<iostream>
-#include<vector>
+#include <iostream>
+#include <vector>
 
 /*
 //Loading a PNG into a TEXTURE

@@ -1,4 +1,11 @@
 #include "Camera2D.h"
+
+#include"InputManager.h"
+
+#include<glm\gtc\matrix_transform.hpp>
+
+/// #include<iostream>
+
 #define someDefaultValue  500
 
 namespace Adina{
@@ -44,6 +51,28 @@ namespace Adina{
 			glm::vec3 scale(m_scaleFactor, m_scaleFactor, 0.0f);
 			m_cameraMatrix = glm::scale(glm::mat4(1.0f), scale) * m_cameraMatrix;
 			m_needMatrixUpdate = false;
+		}
+	}
+	//==================================================================================
+	//==================================================================================
+	//==================================================================================
+	void Camera2D::onSDLEvent(SDL_Event& evnt)
+	{
+		float SCALE_CHANGING_SPEED = 0.1f;
+		float SCALE_MINIM_VALUE = 0.2f; // bug if less than
+		switch (evnt.type) {
+			case SDL_MOUSEWHEEL :
+				if (evnt.wheel.y > 0){
+					m_scaleFactor += SCALE_CHANGING_SPEED;
+				}
+				else{
+					if (m_scaleFactor > SCALE_MINIM_VALUE){
+						m_scaleFactor -= SCALE_CHANGING_SPEED;
+					}
+				}
+				m_needMatrixUpdate = true;
+				///std::cout << "m_scaleFactor: " << m_scaleFactor << std::endl;
+			break;
 		}
 	}
 	//==================================================================================

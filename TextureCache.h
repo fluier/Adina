@@ -1,8 +1,10 @@
 #pragma once
 
+#include"GLTexture.h"
+
+
 #include<map>
 
-#include"GLTexture.h"
 
 namespace Adina{
 	class TextureCache

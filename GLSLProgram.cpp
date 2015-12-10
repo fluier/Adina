@@ -1,5 +1,10 @@
+#include <GL\glew.h>
+
 #include "GLSLProgram.h"
+
 #include "my_Errors.h"
+
+#include "IOManager.h"
 
 #include <vector>
 
@@ -23,33 +28,56 @@ namespace Adina {
 	//==================================================================================
     GLSLProgram::~GLSLProgram()
     {
+		glDetachShader(m_programID, m_vertexShaderID);
+		glDetachShader(m_programID, m_fragmentShaderID);
+		glDeleteShader(m_vertexShaderID);
+		glDeleteShader(m_fragmentShaderID);
+		glDeleteProgram(m_programID);
     }
 	//==================================================================================
 	//==================================================================================
 	//==================================================================================
     //Compiles the shaders into a form that your GPU can understand
-    void GLSLProgram::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilepath) {
+	void GLSLProgram::compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath) {
         //Vertex and fragment shaders are successfully compiled.
         //Now time to link them together into a program.
         //Get a program object.
         m_programID = glCreateProgram();
 
-        //Create the vertex shader object, and store its ID
-        m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-        if (m_vertexShaderID == 0) {
-            fatalError("Vertex shader failed to be created!");
-        }
+		std::string vertSource;
+		std::string fragSource;
 
-        //Create the fragment shader object, and store its ID
-        m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-        if (m_fragmentShaderID == 0) {
-            fatalError("Fragment shader failed to be created!");
-        }
+		IOManager::readFileToBuffer(vertexShaderFilePath, vertSource);
+		IOManager::readFileToBuffer(fragmentShaderFilePath, fragSource);
 
         //Compile each shader
-        compileShader(vertexShaderFilePath, m_vertexShaderID);
-        compileShader(fragmentShaderFilepath, m_fragmentShaderID);
+		compileShadersFromSource(vertSource.c_str(), fragSource.c_str());
     }
+	//==================================================================================
+	//==================================================================================
+	//==================================================================================
+	void GLSLProgram::compileShadersFromSource(const char* vertexSource, const char* fragmentSource) {
+		//Vertex and fragment shaders are successfully compiled.
+		//Now time to link them together into a program.
+		//Get a program object.
+		m_programID = glCreateProgram();
+
+		//Create the vertex shader object, and store its ID
+		m_vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+		if (m_vertexShaderID == 0) {
+			fatalError("Vertex shader failed to be created!");
+		}
+
+		//Create the fragment shader object, and store its ID
+		m_fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+		if (m_fragmentShaderID == 0) {
+			fatalError("Fragment shader failed to be created!");
+		}
+
+		//Compile each shader
+		compileShader(vertexSource, "Vertex Shader", m_vertexShaderID);
+		compileShader(fragmentSource, "Fragment Shader", m_fragmentShaderID);
+	}
 	//==================================================================================
 	//==================================================================================
 	//==================================================================================
@@ -152,58 +180,43 @@ namespace Adina {
 	//==================================================================================
 	//==================================================================================
 	//==================================================================================
+	void GLSLProgram::dispose() {
+		if (m_programID) glDeleteProgram(m_programID);
+	}
+	//==================================================================================
+	//==================================================================================
+	//==================================================================================
     //Compiles a single shader file
-    void GLSLProgram::compileShader(const std::string& filePath, GLuint id) {
+	void GLSLProgram::compileShader(const char* source, const std::string& name, GLuint id) {
 
-        //Open the file
-        std::ifstream shaderFile(filePath);
-        if (shaderFile.fail()) {
-            perror(filePath.c_str());
-            fatalError("Failed to open " + filePath);
-        }
+		//tell opengl that we want to use fileContents as the contents of the shader file
+		glShaderSource(id, 1, &source, nullptr);
 
-        //File contents stores all the text in the file
-        std::string fileContents = "";
-        //line is used to grab each line of the file
-        std::string line;
+		//compile the shader
+		glCompileShader(id);
 
-        //Get all the lines in the file and add it to the contents
-        while (std::getline(shaderFile, line)) {
-            fileContents += line + "\n";
-        }
+		//check for errors
+		GLint success = 0;
+		glGetShaderiv(id, GL_COMPILE_STATUS, &success);
 
-        shaderFile.close();
+		if (success == GL_FALSE)
+		{
+			GLint maxLength = 0;
+			glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
 
-        //get a pointer to our file contents c string;
-        const char* contentsPtr = fileContents.c_str();
-        //tell opengl that we want to use fileContents as the contents of the shader file
-        glShaderSource(id, 1, &contentsPtr, nullptr);
+			//The maxLength includes the NULL character
+			std::vector<char> errorLog(maxLength);
+			glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
 
-        //compile the shader
-        glCompileShader(id);
+			//Provide the infolog in whatever manor you deem best.
+			//Exit with failure.
+			glDeleteShader(id); //Don't leak the shader.
 
-        //check for errors
-        GLint success = 0;
-        glGetShaderiv(id, GL_COMPILE_STATUS, &success);
-
-        if (success == GL_FALSE)
-        {
-            GLint maxLength = 0;
-            glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
-
-            //The maxLength includes the NULL character
-            std::vector<char> errorLog(maxLength);
-            glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
-
-            //Provide the infolog in whatever manor you deem best.
-            //Exit with failure.
-            glDeleteShader(id); //Don't leak the shader.
-
-            //Print error log and quit
-            std::printf("%s\n", &(errorLog[0]));
-            fatalError("Shader " + filePath + " failed to compile");
-        }
-    }
+			//Print error log and quit
+			std::printf("%s\n", &(errorLog[0]));
+			fatalError("Shader " + name + " failed to compile");
+		}
+	}
 	//==================================================================================
 	//==================================================================================
 	//==================================================================================

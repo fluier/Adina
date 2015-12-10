@@ -1,10 +1,11 @@
 #pragma once
 
-#include<GL/glew.h>
 
 #include"GLTexture.h"
 
 #include<string>
+
+typedef unsigned int GLuint;
 
 namespace Adina{
 	class Sprite

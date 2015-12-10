@@ -1,8 +1,11 @@
 #pragma once
 
-#include <string>
-#include <GL\glew.h>
 #include<glm\glm.hpp>
+
+#include <string>
+
+typedef unsigned int GLuint;
+typedef int GLint;
 
 namespace Adina {
 
@@ -14,7 +17,9 @@ namespace Adina {
         GLSLProgram();
         ~GLSLProgram();
 
-        void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilepath);
+		void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
+
+		void compileShadersFromSource(const char* vertexSource, const char* fragmentSource);
 
         void linkShaders();
 
@@ -29,12 +34,15 @@ namespace Adina {
 
         void use();
         void unuse();
+
+		void dispose();
+
     private:
+		void compileShader(const char* source, const std::string& name, GLuint id);
+
+		GLint getUniformLocation(const std::string& uniformName);
 
         int m_numAttributes;
-
-        void compileShader(const std::string& filePath, GLuint id);
-		GLint getUniformLocation(const std::string& uniformName);
 
         GLuint m_programID;
 

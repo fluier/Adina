@@ -1,8 +1,11 @@
+#include<GL\glew.h>
+
+#include <SDL2/SDL.h>
+
 #include "SpriteFont.h"
 
 #include "SpriteBatch.h"
 
-#include <SDL2/SDL.h>
 //==================================================================================
 int closestPow2(int i) {
     i--;

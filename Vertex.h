@@ -1,8 +1,8 @@
 #pragma once
 
-#include <GL\glew.h>
-
 #define defaultColorValue 0
+
+typedef unsigned char GLubyte;
 
 namespace Adina{
 	struct Position

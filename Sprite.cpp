@@ -1,6 +1,9 @@
+#include<GL/glew.h>
+
+#include "Vertex.h"
+
 #include "Sprite.h"
 
-#include"Vertex.h"
 
 #include"ResourceManager.h"
 

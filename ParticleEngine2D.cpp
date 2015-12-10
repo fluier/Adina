@@ -18,8 +18,13 @@ namespace Adina{
 	//responsible for deallocation
 	ParticleEngine2D::~ParticleEngine2D()
 	{
+		/*
 		for (auto& b : m_batches){
 			delete[] b;
+		}
+		*/
+		for (int i = 0; i < m_batches.size(); i++){
+			delete m_batches[i];
 		}
 	}
 	////==================================================================================

@@ -1,6 +1,6 @@
 #pragma once
 
-#include<GL\glew.h>
+typedef unsigned int GLuint;
 
 namespace Adina{
 	struct  GLTexture
@@ -8,11 +8,7 @@ namespace Adina{
 		GLuint id;
 		int width;
 		int height;
-		void bind(){
-			glBindTexture(GL_TEXTURE_2D, id);
-		}
-		void unbind(){
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
+		void bind();
+		void unbind();
 	};
 }
