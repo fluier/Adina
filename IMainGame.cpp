@@ -22,10 +22,10 @@ namespace Adina {
         // Empty
     }
 
-    void IMainGame::run() 
+	void IMainGame::run(std::string windowName)
 	{
 
-        if (!init()) return;
+		if (!init(windowName)) return;
 
 		// Some helpful constants.
 		const float DESIRED_FPS = 60.0f; // FPS the game is designed to run at
@@ -106,12 +106,12 @@ namespace Adina {
         }
     }
 
-    bool IMainGame::init() {
+	bool IMainGame::init(std::string windowName) {
 		Adina::init();
 
 		SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-        if (!initSystems()) return false;
+		if (!initSystems(windowName)) return false;
 
         onInit();
         addScreens();
@@ -123,8 +123,8 @@ namespace Adina {
         return true;
     }
 
-    bool IMainGame::initSystems() {
-        m_window.create("Default", 1350, 700, 0);
+	bool IMainGame::initSystems(std::string windowName) {
+		m_window.create(windowName, 1350, 700, 0);
         return true;
     }
 

@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include <memory>
 
+#include<string>
 
 
 namespace Adina {
@@ -19,7 +20,7 @@ namespace Adina {
         virtual ~IMainGame();
 
         // Runs and initializes the game
-        void run();
+        void run(std::string windowName = "Default");
         // Exits the game
         void exitGame();
 
@@ -43,8 +44,8 @@ namespace Adina {
         // Custom render function
         virtual void draw();
 		
-        bool init();
-        bool initSystems();
+		bool init(std::string windowName);
+		bool initSystems(std::string windowName);
 
         std::unique_ptr<ScreenList> m_screenList = nullptr;
         IGameScreen* m_currentScreen = nullptr;
